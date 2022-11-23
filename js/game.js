@@ -17,17 +17,18 @@ var gLevel = {
 };
 
 var gBoard
-var gSize = gLevel.SIZE
+
 
 function initGame() {
-    gBoard = createBoard(gSize)
+    gBoard = createBoard(gLevel)
     renderBoard(gBoard, '.board')
 
 }
 
 
-function createBoard(gSize) {
-    var size = gSize
+function createBoard(gLevel) {
+    var size = gLevel.SIZE
+    var mines = gLevel.MINES
     const board = []
     for (var i = 0; i < size; i++) {
         board.push([])
@@ -44,7 +45,7 @@ function createBoard(gSize) {
 
         }
     }
-    for (var k = 0; k < gLevel.MINES; k++) {
+    for (var k = 0; k < mines; k++) {
         var x = getRandomInt(0, gLevel.SIZE)
         var y = getRandomInt(0, gLevel.SIZE)
         if (board[x][y].isMine) {
@@ -91,8 +92,9 @@ function renderBoard(mat, selector) {
 }
 
 function checkVictory(board) {
-    var mineCount = 0
-    var shownedCellCount = 0
+    var mineCount = gGame.shownCount
+    var shownedCellCount = gGame.markedCount
+
 
     for (var i = 0; i < board.length; i++) {
 
@@ -100,13 +102,15 @@ function checkVictory(board) {
             var currCell = board[i][j]
             if (currCell.isMine && currCell.isMarked) {
                 mineCount++
+
             } else if (currCell.isShown) shownedCellCount++
 
         }
     }
 
-    if (mineCount + shownedCellCount === gSize ** 2) {
+    if (mineCount + shownedCellCount === gLevel.SIZE ** 2) {
         clearInterval(gTime)
+
         alert('you won!')
     }
 
@@ -127,15 +131,35 @@ function gameOver(board) {
 
         }
     }
-    // console.log(elClicked, cellI, cellJ);
-    // document.querySelectorAll()
-
-
 
 }
 
+function chooseLvl(el) {
+    // console.log(el.innerHTML);
+    if (el.innerHTML === 'Medium') {
+        // console.log('hi');
+        gLevel.SIZE = 8
+        gLevel.MINES = 14
+        restart()
+    } else if (el.innerHTML === 'Expert') {
+        gLevel.SIZE = 12
+        gLevel.MINES = 32
+        restart()
+    } else if (el.innerHTML === 'Beginner') {
+        gLevel.SIZE = 4
+        gLevel.MINES = 2
+        restart()
+    }
 
+}
 
 function restart() {
+    clearInterval(gTime)
+    var elSec = document.querySelector('.sec')
+    var elMin = document.querySelector('.min')
+    elSec.innerText = '00'
+    elMin.innerText = '00'
+    gTime = false
 
+    initGame()
 }

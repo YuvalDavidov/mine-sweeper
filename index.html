@@ -8,15 +8,15 @@
     <title>mine-sweeper</title>
 </head>
 
-<body onload="initGame()">
+<body onload="initGame()" oncontextmenu="return false">
 
     <div>lives</div>
-    <div>time <span class="timer">0</span></div>
-    <button>Beginner</button>
-    <button>Medium</button>
-    <button>Expert</button>
+    <div class="timer"><span class="min">00</span>:<span class="sec">00</span></div>
+    <button onclick="chooseLvl(this)">Beginner</button>
+    <button onclick="chooseLvl(this)">Medium</button>
+    <button onclick="chooseLvl(this)">Expert</button>
     <br>
-    <button>restart</button>
+    <button onclick="restart()">restart</button>
 
 
     <div class="board">

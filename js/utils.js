@@ -24,11 +24,9 @@ function renderCell(location, value) {
 }
 
 function cellClicked(elClicked, cellI, cellJ, ev) {
-    var elTime = document.querySelector('.timer')
+    var elTime = document.querySelector('.sec')
     var currSec = elTime.innerText
-    if (+currSec === 0 && !gTime) {
-
-
+    if (currSec === '00' && !gTime) {
         gTime = setInterval(() => {
             timer()
         }, 1000);
@@ -41,6 +39,11 @@ function cellClicked(elClicked, cellI, cellJ, ev) {
                 if (!gBoard[cellI][cellJ].isShown) {
                     gBoard[cellI][cellJ].minesAroundCount = countMineNeighbors(cellI, cellJ, gBoard)
                     elClicked.innerHTML = countMineNeighbors(cellI, cellJ, gBoard)
+                    if (+elClicked.innerHTML === 0 && !gBoard[cellI][cellJ].isMine) {
+                        revealNeighbors(cellI, cellJ)
+
+                    }
+
                     gBoard[cellI][cellJ].isShown = true
                     if (gBoard[cellI][cellJ].isMine) {
 
@@ -75,10 +78,45 @@ function getRandomInt(min, max) {
 }
 
 function timer() {
+    var tens = '0'
 
-    var elTime = document.querySelector('.timer')
-
-    var currSec = elTime.innerText
+    var elSec = document.querySelector('.sec')
+    var currSec = elSec.innerText
     currSec++
-    elTime.innerText = currSec
+    if (currSec > 9) tens = ''
+    elSec.innerText = tens + currSec
+
+    var tens2 = '0'
+    var elMin = document.querySelector('.min')
+    var currMin = elMin.innerText
+
+    if (currSec >= 60) {
+        currMin++
+        currSec = 0
+        elSec.innerText = 0
+        tens = '0'
+        if (currMin > 9) tens2 = ''
+        elMin.innerText = tens2 + currMin
+        elSec.innerText = tens + currSec
+    }
+
+
+
+
+}
+
+function revealNeighbors(iCell, jCell) {
+
+    for (var i = iCell - 1; i <= iCell + 1; i++) {
+
+        for (var j = jCell - 1; j <= jCell + 1; j++) {
+            if (i === iCell && j === jCell) continue
+            if (i < 0 || i > gBoard[0].length - 1 || j > gBoard[0].length - 1 || j < 0) continue
+            else {
+                var currCell = gBoard[i][j]
+                currCell.isShown = true
+                renderCell(currCell.location, countMineNeighbors(i, j, gBoard))
+            }
+        }
+    }
 }

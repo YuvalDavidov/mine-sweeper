@@ -11,7 +11,8 @@ var gGame = {
     isOn: false,
     shownCount: 0,
     markedCount: 0,
-    secsPassed: 0
+    lives: 3,
+    hints: 3
 }
 var gLevel = {
     SIZE: 4,
@@ -47,25 +48,7 @@ function createBoard(gLevel) {
 
         }
     }
-    // for (var k = 0; k < mines; k++) {
-    //     var x = getRandomInt(0, gLevel.SIZE)
-    //     var y = getRandomInt(0, gLevel.SIZE)
-    //     if (board[x][y].isMine) {
-    //         k--
-    //     } else {
-    //         var mine = {
-    //             location: { i: x, j: y },
-    //             symbol: MINE,
-    //             // minesAroundCount: 4,
-    //             isShown: false,
-    //             isMine: true,
-    //             isMarked: false
-    //         }
-    //         board[x][y] = mine
-    //     }
 
-    // }
-    // console.log(board);
     return board
 }
 
@@ -114,7 +97,7 @@ function checkVictory(board) {
         clearInterval(gTime)
         gGame.isOn = false
         elSmile.innerText = '😎'
-        alert('you won!')
+        // alert('you won!')
     }
 
 }
@@ -159,6 +142,8 @@ function restart() {
     clearInterval(gTime)
     elSmile.innerText = '🙂'
     elFlagCount.innerText = gLevel.MINES
+    gGame.lives = 3
+    elLives.innerText = gGame.lives
     var elSec = document.querySelector('.sec')
     var elMin = document.querySelector('.min')
     elSec.innerText = '00'

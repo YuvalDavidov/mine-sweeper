@@ -11,13 +11,16 @@
 <body onload="initGame()">
 
     <h1>Mine Sweepers</h1>
-    <div>flags left: <span class="flags"></span> </div>
-    <div class="timer"><span class="min">00</span>:<span class="sec">00</span></div>
+    <!-- <div> <span class="hints"></span> hints</div> -->
+
+    <div><span class="lives"></span> lives left</div>
     <button onclick="chooseLvl(this)">Beginner</button>
     <button onclick="chooseLvl(this)">Medium</button>
     <button onclick="chooseLvl(this)">Expert</button>
     <br>
+    <div class="f">flags left: <span class="flags"></span> </div>
     <button class="restart" onclick="restart()">🙂</button>
+    <div class="timer"><span class="min">00</span>:<span class="sec">00</span></div>
 
 
     <div class="board" oncontextmenu="return false">

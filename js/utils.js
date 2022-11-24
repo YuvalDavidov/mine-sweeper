@@ -2,6 +2,11 @@
 var elFlagCount = document.querySelector('.flags')
 elFlagCount.innerText = gLevel.MINES
 
+var elLives = document.querySelector('.lives')
+elLives.innerText = gGame.lives
+
+var elHints = document.querySelector('.hints')
+elHints.innerText = gGame.hints
 
 
 function countMineNeighbors(cellI, cellJ, mat) {
@@ -27,6 +32,7 @@ function renderCell(location, value) {
 }
 
 function cellClicked(elClicked, cellI, cellJ, ev) {
+
     if (!gGame.isOn) {
         var mines = gLevel.MINES
         for (var k = 0; k < mines; k++) {
@@ -52,8 +58,6 @@ function cellClicked(elClicked, cellI, cellJ, ev) {
         }
     }
 
-
-
     var elTime = document.querySelector('.sec')
     var currSec = elTime.innerText
     if (currSec === '00' && !gTime) {
@@ -64,8 +68,6 @@ function cellClicked(elClicked, cellI, cellJ, ev) {
         }, 1000);
 
     }
-
-
 
     if (gGame.isOn) {
         switch (ev.button) {
@@ -89,11 +91,15 @@ function cellClicked(elClicked, cellI, cellJ, ev) {
 
                         gBoard[cellI][cellJ].isShown = true
                         if (gBoard[cellI][cellJ].isMine) {
-
+                            gGame.lives--
+                            elLives.innerText = gGame.lives
                             elClicked.innerHTML = MINE
                             elClicked.classList.add('cellRed')
+                            if (gGame.lives === 0) {
+                                gameOver(gBoard)
+                            }
 
-                            gameOver(gBoard)
+
                         }
 
                     }
@@ -149,9 +155,6 @@ function timer() {
         elSec.innerText = tens + currSec
     }
 
-
-
-
 }
 
 
@@ -185,5 +188,9 @@ function revealNeighbors(iCell, jCell) {
             }
         }
     }
+
+}
+
+function hints() {
 
 }

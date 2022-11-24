@@ -27,6 +27,32 @@ function renderCell(location, value) {
 }
 
 function cellClicked(elClicked, cellI, cellJ, ev) {
+    if (!gGame.isOn) {
+        var mines = gLevel.MINES
+        for (var k = 0; k < mines; k++) {
+            var x = getRandomInt(0, gLevel.SIZE)
+            var y = getRandomInt(0, gLevel.SIZE)
+            if (gBoard[x][y].isMine) {
+                k--
+            } if (x === cellI && y === cellJ) {
+                k--
+            }
+            else {
+                var mine = {
+                    location: { i: x, j: y },
+                    symbol: MINE,
+                    // minesAroundCount: 4,
+                    isShown: false,
+                    isMine: true,
+                    isMarked: false
+                }
+                gBoard[x][y] = mine
+            }
+
+        }
+    }
+
+
 
     var elTime = document.querySelector('.sec')
     var currSec = elTime.innerText

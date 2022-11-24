@@ -47,24 +47,24 @@ function createBoard(gLevel) {
 
         }
     }
-    for (var k = 0; k < mines; k++) {
-        var x = getRandomInt(0, gLevel.SIZE)
-        var y = getRandomInt(0, gLevel.SIZE)
-        if (board[x][y].isMine) {
-            k--
-        } else {
-            var mine = {
-                location: { i: x, j: y },
-                symbol: MINE,
-                // minesAroundCount: 4,
-                isShown: false,
-                isMine: true,
-                isMarked: false
-            }
-            board[x][y] = mine
-        }
+    // for (var k = 0; k < mines; k++) {
+    //     var x = getRandomInt(0, gLevel.SIZE)
+    //     var y = getRandomInt(0, gLevel.SIZE)
+    //     if (board[x][y].isMine) {
+    //         k--
+    //     } else {
+    //         var mine = {
+    //             location: { i: x, j: y },
+    //             symbol: MINE,
+    //             // minesAroundCount: 4,
+    //             isShown: false,
+    //             isMine: true,
+    //             isMarked: false
+    //         }
+    //         board[x][y] = mine
+    //     }
 
-    }
+    // }
     // console.log(board);
     return board
 }
@@ -79,7 +79,7 @@ function renderBoard(mat, selector) {
 
             const cell = mat[i][j]
             const className = `cell cell-${i}-${j}`
-            if (cell.symbol === MINE) cell.symbol = EMPTY
+            if (cell.isMine) cell.symbol = EMPTY
 
             strHTML += `<td class="${className}" onmousedown="cellClicked(this,${cell.location.i},${cell.location.j},event)">${cell.symbol}</td>`
             // console.log(cell);

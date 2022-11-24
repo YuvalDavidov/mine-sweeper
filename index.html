@@ -8,22 +8,23 @@
     <title>mine-sweeper</title>
 </head>
 
-<body onload="initGame()" oncontextmenu="return false">
+<body onload="initGame()">
 
-    <div>lives</div>
+    <h1>Mine Sweepers</h1>
+    <div>flags left: <span class="flags"></span> </div>
     <div class="timer"><span class="min">00</span>:<span class="sec">00</span></div>
     <button onclick="chooseLvl(this)">Beginner</button>
     <button onclick="chooseLvl(this)">Medium</button>
     <button onclick="chooseLvl(this)">Expert</button>
     <br>
-    <button onclick="restart()">restart</button>
+    <button class="restart" onclick="restart()">🙂</button>
 
 
-    <div class="board">
+    <div class="board" oncontextmenu="return false">
 
     </div>
 
-
+    <div class="footer">Yuval Davidov</div>
     <script src="js/game.js"></script>
     <script src="js/utils.js"></script>
 

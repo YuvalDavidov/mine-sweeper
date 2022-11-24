@@ -1,9 +1,11 @@
 'uses strict'
 
-const MINE = '💣'
+const MINE = '<img src="img/minesweeper.png">'
 const EMPTY = ''
 const FLAG = '🚩'
 var gTime
+var gBoard
+var elSmile = document.querySelector('.restart')
 
 var gGame = {
     isOn: false,
@@ -16,7 +18,7 @@ var gLevel = {
     MINES: 2
 };
 
-var gBoard
+
 
 
 function initGame() {
@@ -36,7 +38,7 @@ function createBoard(gLevel) {
             var cell = {
                 location: { i: i, j: j },
                 symbol: EMPTY,
-                minesAroundCount: 0,
+                minesAroundCount: -1,
                 isShown: false,
                 isMine: false,
                 isMarked: false
@@ -69,7 +71,7 @@ function createBoard(gLevel) {
 
 function renderBoard(mat, selector) {
 
-    var strHTML = '<table border="0"><tbody>'
+    var strHTML = '<table border="0" align= "center"><tbody>'
     for (var i = 0; i < mat.length; i++) {
 
         strHTML += '<tr>'
@@ -110,7 +112,8 @@ function checkVictory(board) {
 
     if (mineCount + shownedCellCount === gLevel.SIZE ** 2) {
         clearInterval(gTime)
-
+        gGame.isOn = false
+        elSmile.innerText = '😎'
         alert('you won!')
     }
 
@@ -119,7 +122,7 @@ function checkVictory(board) {
 
 function gameOver(board) {
     clearInterval(gTime)
-
+    elSmile.innerText = '🤯'
     for (var i = 0; i < board.length; i++) {
 
         for (var j = 0; j < board[0].length; j++) {
@@ -131,13 +134,12 @@ function gameOver(board) {
 
         }
     }
-
+    gGame.isOn = false
 }
 
 function chooseLvl(el) {
-    // console.log(el.innerHTML);
+
     if (el.innerHTML === 'Medium') {
-        // console.log('hi');
         gLevel.SIZE = 8
         gLevel.MINES = 14
         restart()
@@ -155,11 +157,13 @@ function chooseLvl(el) {
 
 function restart() {
     clearInterval(gTime)
+    elSmile.innerText = '🙂'
+    elFlagCount.innerText = gLevel.MINES
     var elSec = document.querySelector('.sec')
     var elMin = document.querySelector('.min')
     elSec.innerText = '00'
     elMin.innerText = '00'
     gTime = false
-
+    gGame.isOn = false
     initGame()
 }

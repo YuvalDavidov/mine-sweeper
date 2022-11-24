@@ -1,4 +1,7 @@
 'use strict'
+var elFlagCount = document.querySelector('.flags')
+elFlagCount.innerText = gLevel.MINES
+
 
 
 function countMineNeighbors(cellI, cellJ, mat) {
@@ -24,49 +27,69 @@ function renderCell(location, value) {
 }
 
 function cellClicked(elClicked, cellI, cellJ, ev) {
+
     var elTime = document.querySelector('.sec')
     var currSec = elTime.innerText
     if (currSec === '00' && !gTime) {
+        gGame.isOn = true
         gTime = setInterval(() => {
+
             timer()
         }, 1000);
 
     }
-    switch (ev.button) {
-        case 0:
-            if (elClicked.innerHTML !== FLAG) {
 
-                if (!gBoard[cellI][cellJ].isShown) {
-                    gBoard[cellI][cellJ].minesAroundCount = countMineNeighbors(cellI, cellJ, gBoard)
-                    elClicked.innerHTML = countMineNeighbors(cellI, cellJ, gBoard)
-                    if (+elClicked.innerHTML === 0 && !gBoard[cellI][cellJ].isMine) {
-                        revealNeighbors(cellI, cellJ)
+
+
+    if (gGame.isOn) {
+        switch (ev.button) {
+            case 0:
+                if (elClicked.innerHTML !== FLAG) {
+
+                    if (!gBoard[cellI][cellJ].isShown) {
+                        gBoard[cellI][cellJ].minesAroundCount = countMineNeighbors(cellI, cellJ, gBoard)
+                        if (gBoard[cellI][cellJ].minesAroundCount === 0) {
+                            elClicked.innerHTML = ' '
+                            elClicked.classList.add('cellShown')
+                        } else {
+                            elClicked.innerHTML = gBoard[cellI][cellJ].minesAroundCount
+                            elClicked.classList.add('cellShown')
+                        }
+
+                        if (gBoard[cellI][cellJ].minesAroundCount === 0 && !gBoard[cellI][cellJ].isMine) {
+                            revealNeighbors(cellI, cellJ)
+
+                        }
+
+                        gBoard[cellI][cellJ].isShown = true
+                        if (gBoard[cellI][cellJ].isMine) {
+
+                            elClicked.innerHTML = MINE
+                            elClicked.classList.add('cellRed')
+
+                            gameOver(gBoard)
+                        }
 
                     }
-
-                    gBoard[cellI][cellJ].isShown = true
-                    if (gBoard[cellI][cellJ].isMine) {
-
-                        elClicked.innerHTML = MINE
-                        elClicked.classList.add('cellRed')
-
-                        gameOver(gBoard)
-                    }
-
                 }
-            }
-            break;
+                break;
 
-        case 2:
-            // console.log('hi');
-            if (elClicked.innerHTML !== FLAG) {
-                elClicked.innerHTML = FLAG
-                gBoard[cellI][cellJ].isMarked = true
-                console.log(gBoard);
-            } else elClicked.innerHTML = EMPTY
-            break;
-    }
+            case 2:
+                // console.log('hi');
+                if (elClicked.innerHTML !== FLAG && elFlagCount.innerText !== '0') {
 
+                    elClicked.innerHTML = FLAG
+                    elFlagCount.innerText--
+                    gBoard[cellI][cellJ].isMarked = true
+                    console.log(gBoard);
+
+                } else if (elClicked.innerHTML === FLAG) {
+                    elClicked.innerHTML = EMPTY
+                    elFlagCount.innerText++
+                }
+                break;
+        }
+    } else return
     checkVictory(gBoard)
 
 }
@@ -105,18 +128,36 @@ function timer() {
 
 }
 
+
 function revealNeighbors(iCell, jCell) {
 
-    for (var i = iCell - 1; i <= iCell + 1; i++) {
+    gBoard[iCell][jCell].minesAroundCount = countMineNeighbors(iCell, jCell, gBoard)
+    if (gBoard[iCell][jCell].minesAroundCount !== 0) {
+        var currCell = gBoard[iCell][jCell]
+        currCell.isShown = true
+        var elCell = document.querySelector(`.cell-${iCell}-${jCell}`)
+        elCell.classList.add('cellShown')
+        renderCell(currCell.location, gBoard[iCell][jCell].minesAroundCount)
+        return
+    }
+    else {
+        var currCell = gBoard[iCell][jCell]
+        currCell.isShown = true
+        var elCell = document.querySelector(`.cell-${iCell}-${jCell}`)
+        elCell.classList.add('cellShown')
+        renderCell(currCell.location, ' ')
+        for (var i = iCell - 1; i <= iCell + 1; i++) {
+            for (var j = jCell - 1; j <= jCell + 1; j++) {
+                if (i === iCell && j === jCell) continue
+                else if (i < 0 || i > gBoard[0].length - 1 || j > gBoard[0].length - 1 || j < 0) continue
+                var currentCell = gBoard[i][j]
+                if (currentCell.isMine) continue
+                if (!currentCell.isShown) {
 
-        for (var j = jCell - 1; j <= jCell + 1; j++) {
-            if (i === iCell && j === jCell) continue
-            if (i < 0 || i > gBoard[0].length - 1 || j > gBoard[0].length - 1 || j < 0) continue
-            else {
-                var currCell = gBoard[i][j]
-                currCell.isShown = true
-                renderCell(currCell.location, countMineNeighbors(i, j, gBoard))
+                    revealNeighbors(i, j)
+                }
             }
         }
     }
+
 }

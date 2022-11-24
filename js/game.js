@@ -12,7 +12,7 @@ var gGame = {
     shownCount: 0,
     markedCount: 0,
     lives: 3,
-    hints: 3
+    // hints: 3
 }
 var gLevel = {
     SIZE: 4,

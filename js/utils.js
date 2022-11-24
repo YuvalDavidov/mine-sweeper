@@ -5,8 +5,8 @@ elFlagCount.innerText = gLevel.MINES
 var elLives = document.querySelector('.lives')
 elLives.innerText = gGame.lives
 
-var elHints = document.querySelector('.hints')
-elHints.innerText = gGame.hints
+// var elHints = document.querySelector('.hints')
+// elHints.innerText = gGame.hints
 
 
 function countMineNeighbors(cellI, cellJ, mat) {
